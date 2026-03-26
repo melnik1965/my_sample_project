@@ -2,8 +2,13 @@ venv/
 __pycache__/
 *.pyc
 *.log
-.DS_Store
+*.tmp
 *.swp
+.DS_Store
 .vscode/
 .idea/
+*.zip
+*.tar.gz
+*.exe
+*.dll
 
