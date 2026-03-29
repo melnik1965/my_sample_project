@@ -1,4 +1,9 @@
 {
   "python.defaultInterpreterPath": "/home/melnik1965/my_sample_project/venv/bin/python3",
+  "code-runner.executorMap": {
+    "python": "/home/melnik1965/my_sample_project/venv/bin/python3 -u"
+  },
+  "code-runner.clearPreviousOutput": true,
+  "code-runner.showExecutionMessage": true,
   "DockerRun.DisableDockerrc": true
 }
