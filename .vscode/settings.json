@@ -1,4 +1,4 @@
 {
-  "python.defaultInterpreterPath": "./venv/bin/python3",
+  "python.defaultInterpreterPath": "/home/melnik1965/my_sample_project/venv/bin/python3",
   "DockerRun.DisableDockerrc": true
 }
