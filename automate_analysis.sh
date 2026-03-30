@@ -60,6 +60,7 @@ setup_environment() {
 
     # Активируем виртуальное окружение
     VENV_DIR="${VENV_DIR:-./venv}"  # Если VENV_DIR пуста, используем ./venv
+    # shellcheck disable=SC1091
     source "$VENV_DIR/bin/activate"
 
     log_info "Обновление pip..."
