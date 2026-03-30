@@ -1,26 +1,32 @@
-#!//bin/bash
+#!/bin/bash
 
 # Скрипт для автоматизации:
-# установки окружения, 
-# загрузки данных и 
-# запуска Python‑аналитики
+# 1. установки окружения,
+# 2. загрузки данных и
+# 3. запуска Python‑аналитики
 # Автор: Студент УИИ Мельничук Ю.А.
+
 TODAY=$(date +%Y-%m-%d)
 echo "Сегодня: $TODAY"
 
 set -e  # Прерывать выполнение при любой ошибке
-
+# 1. Установка окружения
 # Цвета для вывода
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-log_info() {echo -e "${GREEN}[INFO]${NC} $1"
+log_info() { 
+    echo -e "${GREEN}[INFO]${NC} $1"
 }
-log_warn() {echo -e "${YELLOW}[WARN]${NC} $1"
+
+log_warn() { 
+    echo -e "${YELLOW}[WARN]${NC} $1"
 }
-log_error() {echo -e "${RED}[ERROR]${NC} $1"
+
+log_error() { 
+    echo -e "${RED}[ERROR]${NC} $1"
 }
 
 # Конфигурация
@@ -28,7 +34,7 @@ PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" # определяе
 VENV_DIR="$PROJECT_DIR/venv"
 DATA_DIR="$PROJECT_DIR/data"
 PYTHON_SCRIPT="$PROJECT_DIR/analyze_data.py"
-DATA_URL="https://example.com/dataset.csv"  # Замените на реальный URL
+# CSV_FILE="$DATA_DIR/dataset.csv"  # Файл данных
 
 # Зависимости Python
 REQUIREMENTS=(
@@ -42,7 +48,7 @@ REQUIREMENTS=(
 setup_environment() {
     log_info "Установка виртуального окружения..."
 
-    if [ ! -d "$VENV_DIR" ]; then
+    if [ ! -d "$VENV_DIR" ]; then # Если venv отсутствует
         python3 -m venv "$VENV_DIR" || {
             log_error "Не удалось создать виртуальное окружение"
             exit 1
@@ -53,11 +59,12 @@ setup_environment() {
     fi
 
     # Активируем виртуальное окружение
+    VENV_DIR="${VENV_DIR:-./venv}"  # Если VENV_DIR пуста, используем ./venv
     source "$VENV_DIR/bin/activate"
 
     log_info "Обновление pip..."
     pip install --upgrade pip || {
-        log_error "Ошибка обновления pip"
+        log_error "Ошибка обновления pip3"
         exit 1
     }
 
@@ -71,17 +78,17 @@ setup_environment() {
     log_info "Все зависимости установлены"
 }
 
+# 2. Загрузка данных
 # Функция загрузки данных
 download_data() {
-    log_info "Загрузка данных из $DATA_URL..."
-
-    mkdir -p "$DATA_DIR"
-
     # Проверяем, есть ли уже данные
     if [ -f "$DATA_DIR/dataset.csv" ]; then
         log_warn "Файл данных уже существует, пропускаем загрузку"
         return 0
     fi
+    log_info "Загрузка данных из $DATA_URL..."
+
+    mkdir -p "$DATA_DIR"
 
     # Пробуем разные способы загрузки
     if command -v wget &> /dev/null; then
@@ -110,7 +117,7 @@ run_analysis() {
         log_error "Аналитический скрипт не найден: $PYTHON_SCRIPT"
         log_info "Создаём шаблон скрипта..."
         cat > "$PYTHON_SCRIPT" << 'EOF'
-#!/usr/bin/env python3
+#!/venv/bin python3
 import pandas as pd
 import sys
 
@@ -122,8 +129,6 @@ def main():
         print(f"Загружено {len(df)} строк данных")
         print("\nОсновные статистики:")
         print(df.describe())
-
-        # Здесь будет ваша аналитика
         print("\nАнализ завершён успешно!")
 
     except Exception as e:

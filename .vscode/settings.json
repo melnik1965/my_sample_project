@@ -5,5 +5,6 @@
   },
   "code-runner.clearPreviousOutput": true,
   "code-runner.showExecutionMessage": true,
-  "DockerRun.DisableDockerrc": true
+  "DockerRun.DisableDockerrc": true,
+  "files.eol": "\n"
 }
